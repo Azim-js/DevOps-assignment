@@ -1,0 +1,18 @@
+"---------Utilizations---------------"
+
+"----------------CPU-------------"
+
+100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+
+"----------------Memory-----------"
+
+100 * (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes))
+
+"------------------Alerting----------------------"
+
+
+1. 100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)  - > for alerting via dashboard for every 5m if cpu is more than 30 
+
+2. (node_filesystem_size_bytes{mountpoint="/"} - node_filesystem_free_bytes{mountpoint="/"}) / node_filesystem_size_bytes{mountpoint="/"} * 100 -> WHEN A IS ABOVE 20 for 5m
+
+3. rate(node_network_receive_bytes_total[1m]) > 1048576 or rate(node_network_transmit_bytes_total[1m]) > 1048576 -> WHEN A IS ABOVE 1048576 for 1m

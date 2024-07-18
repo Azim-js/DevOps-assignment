@@ -1,0 +1,33 @@
+groups:
+- name: cpu_alerts
+  rules:
+  - alert: HighCpuUsage
+    expr: (100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 30
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High CPU usage detected"
+      description: "The CPU usage has been above 30% for the last 5 minutes on instance {{ $labels.instance }}."
+
+- name: disk_alerts
+  rules:
+  - alert: HighDiskUsage
+    expr: (node_filesystem_size_bytes{mountpoint="/"} - node_filesystem_free_bytes{mountpoint="/"}) / node_filesystem_size_bytes{mountpoint="/"} * 100 > 20
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High Disk usage detected"
+      description: "The root disk usage has been above 20% for the last 5 minutes on instance {{ $labels.instance }}."
+
+- name: network_alerts
+  rules:
+  - alert: HighNetworkTransfer
+    expr: rate(node_network_receive_bytes_total[1m]) > 1048576 or rate(node_network_transmit_bytes_total[1m]) > 1048576
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High Network Transfer Rate detected"
+      description: "The network transfer rate has been above 1 MBPS for the last minute on instance {{ $labels.instance }}."
