@@ -1,0 +1,17 @@
+---
+- name: Install iperf3
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install iperf3
+      apt:
+        name: iperf3
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install iperf3 on RedHat
+      yum:
+        name: iperf3
+        state: present
+      when: ansible_os_family == "RedHat"
+

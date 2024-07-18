@@ -1,0 +1,17 @@
+---
+- name: Install vim on a specific machine
+  hosts: 10.12.13.14
+  become: yes
+  tasks:
+    - name: Install vim
+      apt:
+        name: vim
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install vim on RedHat
+      yum:
+        name: vim
+        state: present
+      when: ansible_os_family == "RedHat"
+

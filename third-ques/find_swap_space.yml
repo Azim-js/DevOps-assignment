@@ -1,0 +1,13 @@
+---
+- name: Check Swap Space
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Get swap space
+      shell: free -m | grep Swap
+      register: swap_output
+
+    - name: Print swap space
+      debug:
+        var: swap_output.stdout_lines
+
